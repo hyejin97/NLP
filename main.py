@@ -1,9 +1,10 @@
 import numpy as np
-from transformers import DistilBertTokenizer, TFDistilBertModel
+from transformers import DistilBertTokenizer, DistilBertModel
 import tensorflow as tf
 from datasets import load_dataset
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+import torch
 
 dataset = load_dataset("md_gender_bias")
 #print (len(dataset['train']['text']))
@@ -23,8 +24,8 @@ for i in tokenized:
 
 padded_token = np.array([i + [0]*(max_len-len(i)) for i in tokenized])
 
-#transform np array to tf tensor
-tensor_padded = tf.convert_to_tensor(padded_token)
+#transform np array to torch tensor
+tensor_padded = torch.tensor(padded_token)
 
 #send input tensor to TFDistillBert
 model_output = model(tensor_padded)
