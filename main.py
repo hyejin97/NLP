@@ -34,7 +34,7 @@ model_output = model(tensor_padded)
 features = model_output[0][:,0,:].numpy()
 
 #Get ground label
-label = dataset['train']['labels']
+labels = dataset['train']['labels']
 
 #split train test
 train_features, test_features, train_labels, test_labels = train_test_split(features, labels)
