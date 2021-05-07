@@ -21,7 +21,7 @@ for i in tokenized:
     if len(i) > max_len:
         max_len = len(i)
 
-padded_token = np.array([i + [0]*max_len-len[i] for i in tokenized])
+padded_token = np.array([i + [0]*(max_len-len(i)) for i in tokenized])
 
 #transform np array to tf tensor
 tensor_padded = tf.convert_to_tensor(padded_token)
