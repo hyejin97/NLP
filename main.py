@@ -10,10 +10,11 @@ dataset = load_dataset("md_gender_bias")
 #print (len(dataset['train']['labels']))
 
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
-model = TFDistilBertModel.from_pretrained('distilbert-base-uncased')
+model = DistilBertModel.from_pretrained('distilbert-base-uncased')
 
-tokenized = [lambda x: tokenizer.encode(x) for x in dataset['train']['text']]
-
+tokenized = []
+for x in dataset['train']['text']:
+    tokenized.append(tokenizer.encode(x))
 #Add padding to tokens so they are same size
 max_len = 0
 for i in tokenized:
