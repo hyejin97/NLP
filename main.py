@@ -27,11 +27,12 @@ padded_token = np.array([i + [0]*(max_len-len(i)) for i in tokenized])
 #transform np array to torch tensor
 tensor_padded = torch.tensor(padded_token)
 
-#send input tensor to TFDistillBert
+#send input tensor to DistillBert
 model_output = model(tensor_padded)
 
 #get features from output
-features = model_output[0][:,0,:].numpy()
+with torch.no_grad():
+    features = model_output[0][:,0,:].numpy()
 
 #Get ground label
 labels = dataset['train']['labels']
