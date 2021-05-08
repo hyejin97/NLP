@@ -5,8 +5,9 @@ from torch.utils.data import DataLoader
 from model import DistillBERTClassifier
 from custom_dataset import GenderDataset
 import torch
+import load_train_data from TrainDataLoader
 
-dataset = load_dataset("md_gender_bias")
+dataset = load_train_data
 #print (len(dataset['train']['text']))
 #print (len(dataset['train']['labels']))
 
@@ -15,7 +16,7 @@ tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
 tokenized = []
 for x in dataset['train']['text']:
     tokenized.append(tokenizer.encode(x))
-    
+
 #Add padding to tokens so they are same size
 max_len = 0
 for i in tokenized:
