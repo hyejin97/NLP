@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from model import DistillBERTClassifier
 from custom_dataset import GenderDataset
 import torch
-import load_train_data from TrainDataLoader
+import load_train_data from training_dataloader
 
 dataset = load_train_data
 #print (len(dataset['train']['text']))
