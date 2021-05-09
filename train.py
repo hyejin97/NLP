@@ -14,7 +14,7 @@ dataset = TrainDataLoader().load_train_data()
 tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
 
 tokenized = []
-for x in dataset['train']['text']:
+for x in dataset['text']:
     tokenized.append(tokenizer.encode(x))
 
 #Add padding to tokens so they are same size
@@ -35,7 +35,7 @@ NUM_EPOCHS = 2
 ####################
 
 #create custom dataloader
-tokened_dict = {'tokens' : tensor_padded, 'labels' : dataset['train']['labels']}
+tokened_dict = {'tokens' : tensor_padded, 'labels' : dataset['label']}
 tokened_ds = Dataset.from_dict(tokened_dict)
 #print(tokened_ds)
 train_ds = GenderDataset(tokened_ds)
