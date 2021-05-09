@@ -61,7 +61,7 @@ opt = torch.optim.Adam(clf.parameters(), lr=LEARNING_RATE)
 for epoch in range(NUM_EPOCHS):
     clf.train()
     for _,data in enumerate(train_dl, 0):
-        labels = data['labels'].to(device, dtype = torch.long)
+        labels = data['label'].to(device, dtype = torch.long)
         tokens = data['tokens'].to(device, dtype = torch.float)
         outputs = model(tokens).squeeze()
         loss = loss_func(outputs, tokens)
