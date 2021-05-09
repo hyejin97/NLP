@@ -1,7 +1,8 @@
+
 from datasets import load_dataset, concatenate_datasets
 class TrainDataLoader:
     def load_train_data(self):
-        return concatenate_datasets(self.load_about_data("train"), self.load_as_data("train"), self.load_to_data("train"))
+        return concatenate_datasets([self.load_about_data("train"), self.load_as_data("train"), self.load_to_data("train")])
 
     def load_about_train_data(self):
         return self.load_about_data("train")
@@ -29,18 +30,28 @@ class TrainDataLoader:
 
     def load_as_data(self, split):
         yelp = load_dataset('md_gender_bias', 'yelp_inferred', split=split)
-        yelp = yelp.rename_column('ternary_label', 'label')
+        yelp = yelp.rename_column('binary_label', 'label')
+        yelp = yelp.remove_columns("binary_score")
 
         convai2 = load_dataset('md_gender_bias', 'convai2_inferred', split=split)
         convai2 = convai2.rename_column('ternary_label', 'label')
-
-        return concatenate_datasets(yelp, convai2)
+        convai2 = convai2.remove_columns("binary_score")
+        convai2 = convai2.remove_columns("ternary_score")
+        convai2 = convai2.remove_columns("binary_label")
+        assert convai2.features.type == yelp.features.type
+        return concatenate_datasets([yelp, convai2])
 
     def load_to_data(self, split):
         light = load_dataset('md_gender_bias', 'light_inferred', split=split)
         light = light.rename_column('ternary_label', 'label')
+        light = light.remove_columns("binary_score")
+        light = light.remove_columns("ternary_score")
+        light = light.remove_columns("binary_label")
 
         openSub = load_dataset('md_gender_bias', 'opensubtitles_inferred', split=split)
         openSub = openSub.rename_column('ternary_label', 'label')
+        openSub = openSub.remove_columns("binary_score")
+        openSub = openSub.remove_columns("ternary_score")
+        openSub = openSub.remove_columns("binary_label")
 
-        return concatenate_datasets(light, openSub)
+        return concatenate_datasets([light, openSub])
