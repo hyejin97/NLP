@@ -15,12 +15,17 @@ class TrainDataLoader:
     def load_about_data(self, split):
         funpedia = load_dataset('md_gender_bias', 'funpedia', split=split)
         funpedia = funpedia.rename_column('gender', 'label')
-
+        funpedia = funpedia.remove_columns("title")
+        funpedia = funpedia.remove_columns("persona")
         imageChat = load_dataset('md_gender_bias', 'image_chat', split=split)
 
         wizard = load_dataset('md_gender_bias', 'wizard', split=split)
         wizard = wizard.rename_column('gender', 'label')
-        return concatenate_datasets(wizard, funpedia)
+        wizard = wizard.remove_columns("chosen_topic")
+        print (funpedia.features.type)
+        print (wizard.features.type)
+        assert funpedia.features.type == wizard.features.type
+        return concatenate_datasets([wizard, funpedia])
 
     def load_as_data(self, split):
         yelp = load_dataset('md_gender_bias', 'yelp_inferred', split=split)
