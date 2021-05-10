@@ -6,6 +6,7 @@ from model import DistillBERTClassifier
 from custom_dataset import GenderDataset
 import torch
 from training_dataloader import TrainDataLoader
+import numpy as np
 
 dataset = TrainDataLoader().load_train_data()
 #print (len(dataset['train']['text']))
