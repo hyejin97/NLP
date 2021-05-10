@@ -85,8 +85,8 @@ for epoch in range(NUM_EPOCHS):
         correct = 0
         total = 0
         for data in test_loader:
-            labels = data['label'].to(device, dtype = torch.long)
-            tokens = data['tokens'].to(device, dtype = torch.float)
+            labels = data['label'].to(device)
+            tokens = data['tokens'].to(device)
             outputs = clf(tokens)
             _, predicted = torch.max(outputs.data, 1)
             total+= labels.size(0)
