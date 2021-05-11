@@ -8,6 +8,7 @@ from nlpaug.util import Action
 def augmentData(text, mode):
     '''mode is either insert or substitute'''
     aug = naw.WordEmbsAug(
-        model_type='word2vec', model_path=model_dir+'GoogleNews-vectors-negative300.bin',
+        model_type='word2vec', model_path='GoogleNews-vectors-negative300.bin',
         action=mode)
     augmented_text = aug.augment(text)
+    return augmented_text
