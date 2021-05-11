@@ -28,7 +28,7 @@ padded_token = np.array([i + [0]*(max_len-len(i)) for i in tokenized])
 onehotvec = []
 for y in dataset['label']:
     vec = [0, 0, 0, 0, 0, 0]
-    vec[y[0]] = 1
+    vec[y] = 1
     onehotvec.append(vec)
 
 #transform np array to torch tensor
