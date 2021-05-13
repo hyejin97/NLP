@@ -32,18 +32,16 @@ def main():
     # Set up a model for finetuning.
     model = DistilBertModel.from_pretrained('distilbert-base-uncased')
 
-    print("Before applying mixout:")
-    for name, module in model.named_modules():
-        print ("NAME: {}".format(name))
-        print (module)
-    #print(model)
-    print ("********************************************************************************************************************")
+
     #smodel.load_state_dict(model_config)
 
     # From now on, we are going to replace dropout with mixout.
     # Since dropout drops all parameters outgoing from the dropped neuron,
     # mixout mixes the parameters of the nn.Linear right after the nn.Dropout.
     for name, module in model.named_modules():
+        if name == 'transformer.layer.0':
+            print (module)
+        '''
         if name in ['transformer.layer.0.attention.dropout',
                     'transformer.layer.1.attention.dropout',
                     'transformer.layer.2.attention.dropout',
@@ -75,11 +73,8 @@ def main():
                                    bias, target_state_dict['weight'], 0.9)
             new_module.load_state_dict(target_state_dict)
             setattr(model, name, new_module)
+        '''
 
-    print("After applying mixout")
-    for name, module in model.named_modules():
-        print (name)
-        print (module)
 
 
 if __name__ == "__main__":
