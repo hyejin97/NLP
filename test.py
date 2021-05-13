@@ -45,6 +45,9 @@ def main():
                     'transformer.layer.3',
                     'transformer.layer.4',
                     'transformer.layer.5']:
+            print ("********************************************")
+            print (module)
+            print ("********************************************")
             for name_c, module_c in module.named_modules():
                 if (name_c == 'attention'):
                     for name_g, module_g in module_c.named_modules():
