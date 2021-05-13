@@ -39,10 +39,12 @@ def main():
     # Since dropout drops all parameters outgoing from the dropped neuron,
     # mixout mixes the parameters of the nn.Linear right after the nn.Dropout.
     for name, module in model.named_modules():
-        if name == 'transformer.layer.0':
-            print ("********************************************")
-            print (module)
-            print ("********************************************")
+        if name in ['transformer.layer.0',
+                    'transformer.layer.1',
+                    'transformer.layer.2',
+                    'transformer.layer.3',
+                    'transformer.layer.4',
+                    'transformer.layer.5']:
             for name_c, module_c in module.named_modules():
                 if (name_c == 'attention'):
                     for name_g, module_g in module_c.named_modules():
@@ -67,7 +69,8 @@ def main():
                             new_module.load_state_dict(target_state_dict)
                             setattr(module_c, name_g, new_module)
                             setattr(module, name_c, module_c)
-            print (module)
+                            setattr(model, name, module)
+    print (model)
         #setattr(model, name, module)
 
 
