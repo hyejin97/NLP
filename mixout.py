@@ -106,3 +106,47 @@ class MixLinear(torch.nn.Module):
         type = 'drop' if self.target is None else 'mix' 
         return '{}={}, in_features={}, out_features={}, bias={}'.format(type+"out", self.p,
             self.in_features, self.out_features, self.bias is not None)
+
+def ApplyBertMixout(model):
+    for t_e_name, t_e_module in model.named_modules():
+        #t_e_name: embeddings, transformer
+        if t_e_name == 'transformer':
+            for l_name, l_module in t_e_module.named_modules():
+                #l_name: layer
+                if l_name == 'layer':
+                    for name, module in l_module.named_modules():
+                        #name: transformer, embeddings
+                        if name in ['0',
+                                    '1',
+                                    '2',
+                                    '3',
+                                    '4',
+                                    '5']:
+                            for name_c, module_c in module.named_modules():
+                                if (name_c == 'attention'):
+                                    for name_g, module_g in module_c.named_modules():
+                                        if (name_g == 'dropout'):
+                                            setattr(module_c, name_g, nn.Dropout(0))
+                                        if (name_g == 'q_lin'):
+                                            target_state_dict = module_g.state_dict()
+                                            bias = True if module_g.bias is not None else False
+                                            new_module = MixLinear(module_g.in_features, module_g.out_features,
+                                                                   bias, target_state_dict['weight'], 0.9)
+                                            new_module.load_state_dict(target_state_dict)
+                                            setattr(module_c, name_g, new_module)
+                                if (name_c == 'ffn'):
+                                    for name_g, module_g in module_c.named_modules():
+                                        if (name_g == 'dropout'):
+                                            setattr(module_c, name_g, nn.Dropout(0))
+                                        if (name_g == 'lin1'):
+                                            target_state_dict = module_g.state_dict()
+                                            bias = True if module_g.bias is not None else False
+                                            new_module = MixLinear(module_g.in_features, module_g.out_features,
+                                                                   bias, target_state_dict['weight'], 0.9)
+                                            new_module.load_state_dict(target_state_dict)
+                                            setattr(module_c, name_g, new_module)
+                                            setattr(module, name_c, module_c)
+                                            setattr(l_module, name, module)
+                                            setattr(t_e_module, l_name, l_module)
+                                            setattr(model, t_e_name, t_e_module)
+    return (model)

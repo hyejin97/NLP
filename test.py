@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from mixout import MixLinear
-
+from mixout import ApplyBertMixout
 from transformers import DistilBertModel
 class FullyConnected(nn.Module):
     def __init__(self):
@@ -31,7 +31,9 @@ def main():
     }
     # Set up a model for finetuning.
     model = DistilBertModel.from_pretrained('distilbert-base-uncased')
-
+    model = ApplyBertMixout(model)
+    print (model)
+    assert (0)
 
     #smodel.load_state_dict(model_config)
 

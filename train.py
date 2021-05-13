@@ -14,6 +14,7 @@ BATCHSIZE = 32
 LEARNING_RATE = 0.01
 NUM_EPOCHS = 2
 NUM_CLASSES = 3
+MIX_OUT = 0
 ####################
 
 #dataset = load_dataset("md_gender_bias")['train']
