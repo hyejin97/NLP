@@ -52,7 +52,7 @@ def main():
                             new_module = MixLinear(module_g.in_features, module_g.out_features,
                                                    bias, target_state_dict['weight'], 0.9)
                             new_module.load_state_dict(target_state_dict)
-                            setattr(module_c, name, new_module)
+                            setattr(module_c, name_g, new_module)
                             print ("**********************************************************")
                             print ("After: ")
                             print (module_c)
