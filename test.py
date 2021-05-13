@@ -43,15 +43,15 @@ def main():
         if t_e_name == 'transformer':
             for l_name, l_module in t_e_module.named_modules():
                 #l_name: layer
-                if l_name == 'transformer.layer':
+                if l_name == 'layer':
                     for name, module in l_module.named_modules():
                         #name: transformer, embeddings
-                        if name in ['transformer.layer.0',
-                                    'transformer.layer.1',
-                                    'transformer.layer.2',
-                                    'transformer.layer.3',
-                                    'transformer.layer.4',
-                                    'transformer.layer.5']:
+                        if name in ['0',
+                                    '1',
+                                    '2',
+                                    '3',
+                                    '4',
+                                    '5']:
                             for name_c, module_c in module.named_modules():
                                 if (name_c == 'attention'):
                                     for name_g, module_g in module_c.named_modules():
