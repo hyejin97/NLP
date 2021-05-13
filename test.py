@@ -42,7 +42,8 @@ def main():
         if name == 'transformer.layer.0':
             print (module)
             for name_c, module_c, in module.named_modules():
-                print (module_c)
+                if (name_c == 'attention'):
+                    print (module_c)
         '''
         if name in ['transformer.layer.0.attention.dropout',
                     'transformer.layer.1.attention.dropout',
