@@ -50,3 +50,6 @@ def main():
             setattr(model, name, new_module)
     print("After applying mixout")
     print(model)
+
+if __name__ == "__main__":
+    main()
