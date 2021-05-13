@@ -41,9 +41,21 @@ def main():
     for name, module in model.named_modules():
         if name == 'transformer.layer.0':
             print (module)
-            for name_c, module_c, in module.named_modules():
+            for name_c, module_c in module.named_modules():
                 if (name_c == 'attention'):
                     print (module_c)
+                    for name_g, module_g in module_c.named_modules():
+                        if (name_g == 'q_lin'):
+                            print (module_g)
+                            target_state_dict = module_g.state_dict()
+                            bias = True if module.bias is not None else False
+                            new_module = MixLinear(module_g.in_features, module_g.out_features,
+                                                   bias, target_state_dict['weight'], 0.9)
+                            new_module.load_state_dict(target_state_dict)
+                            setattr(module_c, name, new_module)
+                            print ("**********************************************************")
+                            print ("After: ")
+                            print (module_c)
         '''
         if name in ['transformer.layer.0.attention.dropout',
                     'transformer.layer.1.attention.dropout',
