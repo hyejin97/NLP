@@ -66,7 +66,7 @@ def main():
                                                    bias, target_state_dict['weight'], 0.9)
                             new_module.load_state_dict(target_state_dict)
                             setattr(module_c, name_g, new_module)
-                setattr(module, name_c, module_c)
+                            setattr(module, name_c, module_c)
             print (module)
         #setattr(model, name, module)
 
