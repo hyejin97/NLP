@@ -48,7 +48,7 @@ def main():
                         if (name_g == 'q_lin'):
                             print (module_g)
                             target_state_dict = module_g.state_dict()
-                            bias = True if module.bias is not None else False
+                            bias = True if module_g.bias is not None else False
                             new_module = MixLinear(module_g.in_features, module_g.out_features,
                                                    bias, target_state_dict['weight'], 0.9)
                             new_module.load_state_dict(target_state_dict)
