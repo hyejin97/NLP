@@ -68,7 +68,7 @@ def main():
                             setattr(module_c, name_g, new_module)
                 setattr(module, name_c, module_c)
         setattr(model, name, module)
-    print (model)
+        print (model)
 
     '''
         if name in ['transformer.layer.0.attention.dropout',
