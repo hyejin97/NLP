@@ -39,24 +39,40 @@ def main():
     # Since dropout drops all parameters outgoing from the dropped neuron,
     # mixout mixes the parameters of the nn.Linear right after the nn.Dropout.
     for name, module in model.named_modules():
-        if name == 'transformer.layer.0':
-            print (module)
+        if name in ['transformer.layer.0',
+                    'transformer.layer.1',
+                    'transformer.layer.2',
+                    'transformer.layer.3',
+                    'transformer.layer.4',
+                    'transformer.layer.5']:
             for name_c, module_c in module.named_modules():
                 if (name_c == 'attention'):
-                    print (module_c)
                     for name_g, module_g in module_c.named_modules():
+                        if (name_g == 'dropout'):
+                            setattr(module_c, name_g, nn.Dropout(0))
                         if (name_g == 'q_lin'):
-                            print (module_g)
                             target_state_dict = module_g.state_dict()
                             bias = True if module_g.bias is not None else False
                             new_module = MixLinear(module_g.in_features, module_g.out_features,
                                                    bias, target_state_dict['weight'], 0.9)
                             new_module.load_state_dict(target_state_dict)
                             setattr(module_c, name_g, new_module)
-                            print ("**********************************************************")
-                            print ("After: ")
-                            print (module_c)
-        '''
+                if (name_c == 'ffn'):
+                    for name_g, module_g in module_c.named_modules():
+                        if (name_g == 'dropout'):
+                            setattr(module_c, name_g, nn.Dropout(0))
+                        if (name_g == 'lin1'):
+                            target_state_dict = module_g.state_dict()
+                            bias = True if module_g.bias is not None else False
+                            new_module = MixLinear(module_g.in_features, module_g.out_features,
+                                                   bias, target_state_dict['weight'], 0.9)
+                            new_module.load_state_dict(target_state_dict)
+                            setattr(module_c, name_g, new_module)
+                setattr(module, name_c, module_c)
+        setattr(model, name, module)
+    print (model)
+
+    '''
         if name in ['transformer.layer.0.attention.dropout',
                     'transformer.layer.1.attention.dropout',
                     'transformer.layer.2.attention.dropout',
