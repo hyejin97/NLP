@@ -34,10 +34,10 @@ def main():
 
     print("Before applying mixout:")
     for name, module in model.named_modules():
-        print (name)
+        print ("NAME: ".format(name))
         print (module)
     #print(model)
-    print ("*****************************************")
+    print ("********************************************************************************************************************")
     #smodel.load_state_dict(model_config)
 
     # From now on, we are going to replace dropout with mixout.
@@ -75,6 +75,7 @@ def main():
                                    bias, target_state_dict['weight'], 0.9)
             new_module.load_state_dict(target_state_dict)
             setattr(model, name, new_module)
+
     print("After applying mixout")
     for name, module in model.named_modules():
         print (name)
