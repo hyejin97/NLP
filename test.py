@@ -34,7 +34,7 @@ def main():
 
     print("Before applying mixout:")
     for name, module in model.named_modules():
-        print ("NAME: ".format(name))
+        print ("NAME: {}".format(name))
         print (module)
     #print(model)
     print ("********************************************************************************************************************")
