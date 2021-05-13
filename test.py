@@ -68,7 +68,7 @@ def main():
                             setattr(module_c, name_g, new_module)
                 setattr(module, name_c, module_c)
                 print (module_c)
-        setattr(model, name, module)
+        #setattr(model, name, module)
 
 
     '''
