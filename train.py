@@ -13,8 +13,8 @@ device = torch.device("cuda")
 #hyperparameters##
 BATCHSIZE = 32
 LEARNING_RATE = 0.01
-NUM_EPOCHS = 2
-NUM_CLASSES = 3
+NUM_EPOCHS = 1
+NUM_CLASSES = 5
 MIX_OUT = 0
 ####################
 
@@ -90,7 +90,7 @@ test_label_vec = torch.tensor(test_onehotvec)
 
 #create custom dataloader
 tokened_dict = {'tokens' : tensor_padded, 'labels' : label_vec}
-test_dataset = {'token': test_padded, 'lables': test_label_vec}
+test_dataset = {'tokens': test_padded, 'labels': test_label_vec}
 #tokened_dict = {'tokens' : tensor_padded, 'labels' : dataset['label']}
 train_ds = Dataset.from_dict(tokened_dict)
 train_ds.set_format(type='torch', columns = ['tokens', 'labels'])
@@ -143,8 +143,8 @@ for epoch in range(NUM_EPOCHS):
         correct = 0
         total = 0
         for data in test_dataloader:
-            labels = data['label'].to(device, dtype = torch.long)
-            tokens = data['tokens'].to(device, dtype = torch.float)
+            labels = data['labels'].to(device)
+            tokens = data['tokens'].to(device)
             outputs = clf(tokens)
             _, predicted = torch.max(outputs.data, 1)
             total+= labels.size(0)
