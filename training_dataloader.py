@@ -18,11 +18,13 @@ class TrainDataLoader:
         funpedia = funpedia.rename_column('gender', 'label')
         funpedia = funpedia.remove_columns("title")
         funpedia = funpedia.remove_columns("persona")
-        imageChat = load_dataset('md_gender_bias', 'image_chat', split=split)
+        funpedia = funpedia.map(self.modifyAboutLables)
+        # imageChat = load_dataset('md_gender_bias', 'image_chat', split=split)
 
         wizard = load_dataset('md_gender_bias', 'wizard', split=split)
         wizard = wizard.rename_column('gender', 'label')
         wizard = wizard.remove_columns("chosen_topic")
+        wizard = wizard.map(self.modifyAboutLables)
         print (funpedia.features.type)
         print (wizard.features.type)
         assert funpedia.features.type == wizard.features.type
@@ -32,14 +34,19 @@ class TrainDataLoader:
         yelp = load_dataset('md_gender_bias', 'yelp_inferred', split=split)
         yelp = yelp.rename_column('binary_label', 'label')
         yelp = yelp.remove_columns("binary_score")
+        yelp = yelp.filter(lambda row: row['label'] == 0)
+        yelp = yelp.map(self.modifyAsLables)
 
         convai2 = load_dataset('md_gender_bias', 'convai2_inferred', split=split)
-        convai2 = convai2.rename_column('ternary_label', 'label')
+        convai2 = convai2.rename_column('binary_label', 'label')
         convai2 = convai2.remove_columns("binary_score")
         convai2 = convai2.remove_columns("ternary_score")
-        convai2 = convai2.remove_columns("binary_label")
+        convai2 = convai2.remove_columns("ternary_label")
+        convai2 = convai2.filter(lambda row: row['label'] == 0)
+        convai2 = convai2.map(self.modifyAsLables)
+
         assert convai2.features.type == yelp.features.type
-        return concatenate_datasets([yelp, convai2])
+        return concatenate_datasets([convai2, yelp])
 
     def load_to_data(self, split):
         light = load_dataset('md_gender_bias', 'light_inferred', split=split)
@@ -54,4 +61,30 @@ class TrainDataLoader:
         openSub = openSub.remove_columns("ternary_score")
         openSub = openSub.remove_columns("binary_label")
 
+        light = light.map(self.modifyToLables)
+        openSub = openSub.map(self.modifyToLables)
+
         return concatenate_datasets([light, openSub])
+
+    def modifyAboutLables(self, row):
+        if row['label'] == 0:
+            row['label'] = 6
+        else if row['label'] == 1:
+            row['label'] = 0
+        else:
+            row['label'] = 1
+        return row
+    def modifyAsLables(self, row):
+        if row['label'] == 0:
+            row['label'] = 4
+        else if row['label'] == 1:
+            row['label'] = 5
+        return row
+    def modifyToLables(self, row):
+        if row['label'] == 0:
+            row['label'] = 2
+        else if row['label'] == 1:
+            row['label'] = 3
+        else:
+            row['label'] = 7
+        return row
