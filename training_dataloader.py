@@ -69,7 +69,7 @@ class TrainDataLoader:
     def modifyAboutLables(self, row):
         if row['label'] == 0:
             row['label'] = 6
-        else if row['label'] == 1:
+        elif row['label'] == 1:
             row['label'] = 0
         else:
             row['label'] = 1
@@ -77,13 +77,13 @@ class TrainDataLoader:
     def modifyAsLables(self, row):
         if row['label'] == 0:
             row['label'] = 4
-        else if row['label'] == 1:
+        elif row['label'] == 1:
             row['label'] = 5
         return row
     def modifyToLables(self, row):
         if row['label'] == 0:
             row['label'] = 2
-        else if row['label'] == 1:
+        elif row['label'] == 1:
             row['label'] = 3
         else:
             row['label'] = 7
