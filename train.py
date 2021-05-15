@@ -9,15 +9,28 @@ import numpy as np
 from evaluation_dataset import EvalDataLoader
 from torchmetrics import functional as metrics
 import torch.nn.functional as F
-
+import argparse
+from mixout import ApplyBertMixout
 device = torch.device("cuda")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", action = "store", help = "Usage: -m r Apply Mixout with rate r", default = 0.9)
+args = parser.parse_args()
 #hyperparameters##
 BATCHSIZE = 32
 LEARNING_RATE = 0.01
 NUM_EPOCHS = 7
 NUM_CLASSES = 5
-MIX_OUT = 0
+if args.m:
+    MIX_OUT = 1
+    MIX_OUT_RATE = args.m
+else:
+    MIX_OUT = 0
+    MIX_OUT_RATE = 0.9
+
+print (MIX_OUT)
+print (MIX_OUT_RATE)
+assert (0)
 ####################
 
 #dataset = load_dataset("md_gender_bias")['train']
@@ -105,6 +118,8 @@ test_dataloader = DataLoader(test_ds, **test_params)
 
 #send input tensor to DistillBert
 model = DistilBertModel.from_pretrained('distilbert-base-uncased')
+if MIX_OUT:
+    model = ApplyBertMixout(model, MIX_OUT_RATE)
 clf = DistillBERTClassifier(model, 768, NUM_CLASSES)
 
 #loss for baseline experiment

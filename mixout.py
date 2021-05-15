@@ -107,7 +107,7 @@ class MixLinear(torch.nn.Module):
         return '{}={}, in_features={}, out_features={}, bias={}'.format(type+"out", self.p,
             self.in_features, self.out_features, self.bias is not None)
 
-def ApplyBertMixout(model):
+def ApplyBertMixout(model, rate=0.9):
     for t_e_name, t_e_module in model.named_modules():
         #t_e_name: embeddings, transformer
         if t_e_name == 'transformer':
@@ -131,7 +131,7 @@ def ApplyBertMixout(model):
                                             target_state_dict = module_g.state_dict()
                                             bias = True if module_g.bias is not None else False
                                             new_module = MixLinear(module_g.in_features, module_g.out_features,
-                                                                   bias, target_state_dict['weight'], 0.9)
+                                                                   bias, target_state_dict['weight'], rate)
                                             new_module.load_state_dict(target_state_dict)
                                             setattr(module_c, name_g, new_module)
                                 if (name_c == 'ffn'):
@@ -142,7 +142,7 @@ def ApplyBertMixout(model):
                                             target_state_dict = module_g.state_dict()
                                             bias = True if module_g.bias is not None else False
                                             new_module = MixLinear(module_g.in_features, module_g.out_features,
-                                                                   bias, target_state_dict['weight'], 0.9)
+                                                                   bias, target_state_dict['weight'], rate)
                                             new_module.load_state_dict(target_state_dict)
                                             setattr(module_c, name_g, new_module)
                                             setattr(module, name_c, module_c)
