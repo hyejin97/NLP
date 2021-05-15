@@ -14,7 +14,7 @@ from mixout import ApplyBertMixout
 device = torch.device("cuda")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-m", action = "store", help = "Usage: -m r Apply Mixout with rate r")
+parser.add_argument("-m", action = "store", type=float,help = "Usage: -m r Apply Mixout with rate r")
 args = parser.parse_args()
 #hyperparameters##
 BATCHSIZE = 32
