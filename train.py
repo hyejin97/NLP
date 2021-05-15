@@ -14,7 +14,7 @@ from mixout import ApplyBertMixout
 device = torch.device("cuda")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-m", action = "store", help = "Usage: -m r Apply Mixout with rate r", default = 0.9)
+parser.add_argument("-m", action = "store", help = "Usage: -m r Apply Mixout with rate r")
 args = parser.parse_args()
 #hyperparameters##
 BATCHSIZE = 32
@@ -28,9 +28,6 @@ else:
     MIX_OUT = 0
     MIX_OUT_RATE = 0.9
 
-print (MIX_OUT)
-print (MIX_OUT_RATE)
-assert (0)
 ####################
 
 #dataset = load_dataset("md_gender_bias")['train']
